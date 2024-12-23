@@ -4,18 +4,10 @@
     "Localizable": [
       {
         "comment": "",
-        "key": "Count : %lld",
-        "location": {
-          "startingColumn": 22,
-          "startingLine": 20
-        }
-      },
-      {
-        "comment": "",
         "key": "Add Book",
         "location": {
           "startingColumn": 38,
-          "startingLine": 21
+          "startingLine": 41
         }
       },
       {
@@ -23,7 +15,7 @@
         "key": "Add Book",
         "location": {
           "startingColumn": 39,
-          "startingLine": 27
+          "startingLine": 47
         }
       }
     ]

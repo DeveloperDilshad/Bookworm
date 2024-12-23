@@ -15,9 +15,29 @@ struct ContentView: View {
     @State private var showingAddScreen = false
     
     var body: some View {
-        VStack {
+       
             NavigationStack{
-                Text("Count : \(books.count)")
+                List(books){book in
+                    NavigationLink {
+                        Text(book.title ?? "Unknown Title")
+                    } label: {
+                        HStack{
+                            VStack{
+                                Text(book.title ?? "Unknown Title")
+                                    .font(.headline)
+                                Text(book.author ?? "Unknown Author")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            Spacer()
+                            
+                            EmojiRatingView(rating: book.rating)
+                                .font(.headline)
+                        }
+                    }
+
+                }
                     .navigationTitle("Add Book")
                     .toolbar{
                         ToolbarItem(placement: .topBarTrailing){
@@ -31,7 +51,7 @@ struct ContentView: View {
                     .sheet(isPresented: $showingAddScreen){
                         AddBookView()
                     }
-            }
+            
         }
         .padding()
     }
