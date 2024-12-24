@@ -10,14 +10,18 @@ import SwiftUI
 struct ContentView: View {
     
     @Environment(\.managedObjectContext) var context
-    @FetchRequest(sortDescriptors: []) var books : FetchedResults<Book>
+    @FetchRequest(sortDescriptors: [
+        SortDescriptor(\.title),
+        SortDescriptor(\.author)
+    ]) var books : FetchedResults<Book>
     
     @State private var showingAddScreen = false
     
     var body: some View {
-       
-            NavigationStack{
-                List(books){book in
+        
+        NavigationStack{
+            List{
+                ForEach(books){book in
                     NavigationLink {
                         Text(book.title ?? "Unknown Title")
                     } label: {
@@ -36,24 +40,39 @@ struct ContentView: View {
                                 .font(.headline)
                         }
                     }
-
+                }.onDelete(perform: deleteBook)
+                
+            }
+            .navigationTitle("Add Book")
+            .toolbar{
+                ToolbarItem(placement: .topBarLeading){
+                    EditButton()
                 }
-                    .navigationTitle("Add Book")
-                    .toolbar{
-                        ToolbarItem(placement: .topBarTrailing){
-                            Button{
-                                showingAddScreen.toggle()
-                            }label: {
-                                Label("Add Book", image: "plus")
-                            }
-                        }
+                ToolbarItem(placement: .topBarTrailing){
+                    Button{
+                        showingAddScreen.toggle()
+                    }label: {
+                        Label("Add Book", image: "plus")
                     }
-                    .sheet(isPresented: $showingAddScreen){
-                        AddBookView()
-                    }
+                }
+            }
+            .sheet(isPresented: $showingAddScreen){
+                AddBookView()
+            }
             
         }
         .padding()
+    }
+    
+    func deleteBook(at offsets:IndexSet){
+        for offset in offsets{
+            
+            let book = books[offset]
+            context.delete(book)
+        }
+        
+        try? context.save()
+        
     }
 }
 
